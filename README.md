@@ -1,6 +1,9 @@
 # I Use Arc BTW
 Exploration of how ArcFace is implementated and a comparison of ArcFace classifier vs softmax on a small training run using DINOv2 S backbone.
 
+<img width="1207" height="1303" alt="image" src="https://github.com/user-attachments/assets/741c3286-6b49-4ffb-b433-6d2ac896e3f0" />
+
+
 ## Roadmap
 
 - [x] 0. Environment: PyTorch on an RTX 5060 Ti (Blackwell, `sm_120`)
