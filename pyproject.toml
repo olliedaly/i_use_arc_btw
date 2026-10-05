@@ -1,0 +1,20 @@
+[project]
+name = "i-use-arc-btw"
+version = "0.1.0"
+description = "Learning ArcFace by fine-tuning DINOv2 with softmax vs ArcFace heads"
+readme = "README.md"
+authors = [
+    { name = "Ollie Daly", email = "olliedaly1995@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "torch>=2.14.1",
+    "torchvision>=0.29.1",
+]
+
+[project.scripts]
+i-use-arc-btw = "i_use_arc_btw:main"
+
+[build-system]
+requires = ["uv_build>=0.12.5,<0.13.0"]
+build-backend = "uv_build"
