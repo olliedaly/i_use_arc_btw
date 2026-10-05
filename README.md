@@ -1,7 +1,7 @@
 # I Use Arc BTW
 Exploration of how ArcFace is implementated and a comparison of ArcFace classifier vs softmax on a small training run using DINOv2 S backbone.
 
-<img width="1207" height="1303" alt="image" src="https://github.com/user-attachments/assets/741c3286-6b49-4ffb-b433-6d2ac896e3f0" />
+<img width="1122" height="1402" alt="image" src="https://github.com/user-attachments/assets/9c139b84-78e1-425a-a59c-2315acc393e1" />
 
 
 ## Roadmap
