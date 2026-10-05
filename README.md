@@ -14,7 +14,7 @@ as a log of what was added and why.
 ## Roadmap
 
 - [x] 0. Environment: PyTorch on an RTX 5060 Ti (Blackwell, `sm_120`)
-- [ ] 1. Load DINOv2 and inspect its outputs
+- [x] 1. Load DINOv2 and inspect its outputs
 - [ ] 2. Embedding neck on top of the backbone
 - [ ] 3. Softmax head (baseline)
 - [ ] 4. ArcFace head
