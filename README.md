@@ -13,3 +13,10 @@ Exploration of how ArcFace is implementated and a comparison of ArcFace classifi
 - [ ] 7. Training loop
 - [ ] 8. Verification evaluation on unseen identities
 - [ ] 9. Compare softmax vs ArcFace
+
+## Setup
+
+```bash
+uv sync
+uv run scripts/check_env.py
+```
