@@ -5,7 +5,7 @@ Exploration of how ArcFace is implementated and a comparison of ArcFace classifi
 
 - [x] 0. Environment: PyTorch on an RTX 5060 Ti (Blackwell, `sm_120`)
 - [x] 1. Load DINOv2 and inspect its outputs
-- [ ] 2. Embedding neck on top of the backbone
+- [x] 2. Embedding neck on top of the backbone
 - [ ] 3. Softmax head (baseline)
 - [ ] 4. ArcFace head
 - [ ] 5. Toy 2D experiment: softmax vs ArcFace feature geometry
