@@ -51,8 +51,14 @@ class ArcFaceHead(nn.Module):
 
         # 4. Add the margin to that angle.
         target = torch.cos(theta_y + self.m)
-        # Past theta = pi - m, cos(theta + m) turns back upwards, so a *worse* angle
-        # would get a higher logit. There, fall back to a fixed subtractive margin.
+
+        # Fallback: cos only falls between 0 and 180 deg. If theta > pi - m (151.4 deg
+        # for m = 0.5), theta + m goes past 180 and cos rises again, so a face further
+        # from its identity would get a *higher* logit. There, approximate instead:
+        # moving the angle by m changes cos by about m * slope, and cos's slope is
+        # -sin(theta), so  cos(theta + m) ~= cos(theta) - m * sin(theta).
+        # That also rises near 180 deg (sin(theta) -> 0), so freeze the slope at the
+        # switch point, sin(pi - m) = sin(m): a constant penalty m * sin(m) ~= 0.24.
         fallback = cos_y - self.m * math.sin(self.m)
         target = torch.where(theta_y + self.m < math.pi, target, fallback)
 
