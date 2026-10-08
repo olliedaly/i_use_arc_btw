@@ -8,3 +8,7 @@ wheels/
 
 # Virtual environments
 .venv
+
+# Downloaded datasets and generated outputs
+data/
+outputs/
