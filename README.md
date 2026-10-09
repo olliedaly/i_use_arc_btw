@@ -12,7 +12,7 @@ Exploration of how ArcFace is implementated and a comparison of ArcFace classifi
 - [x] 3. Softmax head (baseline)
 - [x] 4. ArcFace head
 - [x] 5. Toy 2D experiment: softmax vs ArcFace feature geometry
-- [ ] 6. Face dataset and identity-disjoint split
+- [x] 6. Face dataset and identity-disjoint split
 - [ ] 7. Training loop
 - [ ] 8. Verification evaluation on unseen identities
 - [ ] 9. Compare softmax vs ArcFace
