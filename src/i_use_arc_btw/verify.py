@@ -77,8 +77,11 @@ def pair_histograms(
     w = identity_weights.double()[labels]  # each face carries its identity's weight
     genuine = torch.zeros(BINS, dtype=torch.float64, device=emb.device)
     impostor = torch.zeros_like(genuine)
-    for start in range(0, n, 1024):
-        rows = torch.arange(start, min(start + 1024, n), device=emb.device)
+    # 256 rows per chunk keeps each GPU kernel short. The driver kills kernels that
+    # run too long on a GPU that also drives a display, and 1,024 rows of test's
+    # 18,814 faces hit that limit.
+    for start in range(0, n, 256):
+        rows = torch.arange(start, min(start + 256, n), device=emb.device)
         sims = emb[rows] @ emb.T
         bins = ((sims + 1) / 2 * BINS).long().clamp(0, BINS - 1)
         later = torch.arange(n, device=emb.device)[None] > rows[:, None]

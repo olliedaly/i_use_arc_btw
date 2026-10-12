@@ -15,7 +15,7 @@ Exploration of how ArcFace is implementated and a comparison of ArcFace classifi
 - [x] 6. Face dataset and identity-disjoint split
 - [x] 7. Training loop
 - [x] 8. Verification evaluation on unseen identities
-- [ ] 9. Compare softmax vs ArcFace
+- [x] 9. Compare softmax vs ArcFace
 
 ## Setup
 
