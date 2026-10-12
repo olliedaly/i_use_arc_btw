@@ -59,14 +59,23 @@ def embed(
 
 
 @torch.no_grad()
-def pair_histograms(emb: torch.Tensor, labels: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
+def pair_histograms(
+    emb: torch.Tensor, labels: torch.Tensor, identity_weights: torch.Tensor | None = None
+) -> tuple[torch.Tensor, torch.Tensor]:
     """Histograms of cosine similarity over every genuine and every impostor pair.
 
     Each pair is counted once (i < j). Rows are processed in chunks so the full
     n x n similarity matrix never has to sit in memory.
+
+    identity_weights (one per label) resample identities for a bootstrap: an
+    identity drawn twice counts its genuine pairs twice, and a pair of identities
+    a, b counts w[a] * w[b] times. By default every identity counts once.
     """
     n = len(emb)
-    genuine = torch.zeros(BINS, dtype=torch.long, device=emb.device)
+    if identity_weights is None:
+        identity_weights = torch.ones(int(labels.max()) + 1, device=emb.device)
+    w = identity_weights.double()[labels]  # each face carries its identity's weight
+    genuine = torch.zeros(BINS, dtype=torch.float64, device=emb.device)
     impostor = torch.zeros_like(genuine)
     for start in range(0, n, 1024):
         rows = torch.arange(start, min(start + 1024, n), device=emb.device)
@@ -74,8 +83,9 @@ def pair_histograms(emb: torch.Tensor, labels: torch.Tensor) -> tuple[torch.Tens
         bins = ((sims + 1) / 2 * BINS).long().clamp(0, BINS - 1)
         later = torch.arange(n, device=emb.device)[None] > rows[:, None]
         same = labels[rows, None] == labels[None]
-        genuine += torch.bincount(bins[later & same], minlength=BINS)
-        impostor += torch.bincount(bins[later & ~same], minlength=BINS)
+        g, i = later & same, later & ~same
+        genuine += torch.bincount(bins[g], weights=w[rows, None].expand_as(sims)[g], minlength=BINS)
+        impostor += torch.bincount(bins[i], weights=(w[rows, None] * w[None])[i], minlength=BINS)
     return genuine.cpu(), impostor.cpu()
 
 
