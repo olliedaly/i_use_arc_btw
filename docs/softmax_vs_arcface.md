@@ -40,16 +40,16 @@ dotted lines, so the false-accept rates set on val held for new people: within
 ![ArcFace - softmax on val and test](img/test_differences.png)
 
 The hollow points are val, where the predictions came from. The filled points
-are test. Every interval excludes 0 except FAR = 1e-5.
+are test. Only FAR = 1e-5's intervals cross 0.
 
 ### Predictions, written from val before test was used
 
 1. ArcFace beats softmax at TAR@FAR = 1e-3 and 1e-4 by about 10 points, with
-   intervals that exclude 0. On val: +9.8 [+9.0, +10.6] and +10.5 [+8.4, +12.2].
+   intervals that never cross 0. On val: +9.8 [+9.0, +10.6] and +10.5 [+8.4, +12.2].
 2. ArcFace beats softmax on accuracy at val's threshold by about 1 point.
    On val: +1.1 [+0.9, +1.3].
 3. At FAR = 1e-5, ArcFace is not clearly better: the difference is negative or its
-   interval includes 0. On val: -15.5 [-27.4, +3.2]. The reason is ArcFace's
+   interval crosses 0. On val: -15.5 [-27.4, +3.2]. The reason is ArcFace's
    cluster of low-quality faces ([low_quality_direction.md](low_quality_direction.md)).
 4. Val's thresholds carry over. At FAR = 1e-3 and 1e-4, test's FAR is within a
    factor of 2 of the target. At 1e-5 it may be off by more.
@@ -105,7 +105,10 @@ same-person pairs where 23.1% was possible.
   meets the people it will see.
 - **A paired bootstrap over people** gives the intervals: resample identities with
   replacement, score both models on the same resample, keep the difference,
-  1,000 times.
+  1,000 times. The interval is the middle 95% of those differences. If it never
+  crosses 0, the same model was ahead in nearly every resample, so the result
+  doesn't depend on which people happened to be in the split. If it crosses 0,
+  the resamples disagree about which model is ahead.
 - **All pairs are scored,** with faces capped at 20 per identity so people with
   hundreds of photos don't dominate (as in step 8).
 
