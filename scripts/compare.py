@@ -47,6 +47,10 @@ def paired_bootstrap(embs: dict, k_acc: dict, n_ids: int):
     Resample people with replacement, score both heads on the same resample, and
     keep the difference. This covers which people happen to be in the split, not
     the randomness of training itself.
+
+    TAR@FAR sets its threshold again on every resample, at exactly that FAR, so
+    both heads are compared at the same FAR. Val's thresholds would put them at
+    slightly different FARs on another split. Accuracy uses val's threshold (k_acc).
     """
 
     def scores(name, weights=None):

@@ -40,7 +40,9 @@ dotted lines, so the false-accept rates set on val held for new people: within
 ![ArcFace - softmax on val and test](img/test_differences.png)
 
 The hollow points are val, where the predictions came from. The filled points
-are test. Only FAR = 1e-5's intervals cross 0.
+are test. Only FAR = 1e-5's intervals cross 0. TAR is compared at each split's
+own thresholds and accuracy at val's threshold (see
+[How they are compared](#how-they-are-compared)).
 
 ### Predictions, written from val before test was used
 
@@ -101,8 +103,17 @@ same-person pairs where 23.1% was possible.
   `scripts/compare.py --eval-split val`, and the predictions were committed
   first. Later runs on test only fixed a GPU timeout and added a count and
   figures; the numbers were identical each time.
-- **Thresholds come from val.** A deployed system fixes its threshold before it
-  meets the people it will see.
+- **Thresholds come from val** for the headline, the dots on the ROC figure, the
+  thresholds table and accuracy. A deployed system fixes its threshold before it
+  meets the people it will see, so these show how well that carries over.
+- **TAR differences use each split's own thresholds.** For the TAR@FAR
+  predictions, results and intervals, the threshold is set again on each split
+  and each resample, at exactly the target FAR. Val's thresholds land each model
+  on a slightly different test FAR (at 1e-3: 1.1e-3 for softmax, 1.0e-3 for
+  ArcFace), so comparing at them would mix a TAR gap with a FAR gap. At val's
+  thresholds the test gaps are +9.8, +10.5 and -16.6 points (the thresholds
+  table), against +10.4, +12.3 and -10.1. The first two matching val's
+  predictions exactly is a coincidence: the TARs behind them differ.
 - **A paired bootstrap over people** gives the intervals: resample identities with
   replacement, score both models on the same resample, keep the difference,
   1,000 times. The interval is the middle 95% of those differences. If it never
