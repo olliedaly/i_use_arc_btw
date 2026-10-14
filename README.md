@@ -105,11 +105,11 @@ tested separately.
   it is marked unsure. Any pair containing an unsure photo is rejected, however
   high the cosine between the two photos.
 - **Cohort normalisation** (AS-norm). Compare each photo with 18,144 training
-  photos and keep its 300 highest cosines. Their mean and spread show how freely
-  the photo matches strangers. A pair's new score is how far its cosine sits
-  above each photo's usual scores with strangers, measured in spreads and
-  averaged over the two photos. Unreadable photos have a wide spread, so their
-  high cosines count for less.
+  photos and keep its 300 highest cosines. Their mean and standard deviation
+  show how freely the photo matches strangers. A pair's new score is how far its
+  cosine sits above each photo's usual scores with strangers, measured in
+  standard deviations and averaged over the two photos. Unreadable photos have a
+  large standard deviation, so their high cosines count for less.
 
 ![ArcFace with each fix, on test](docs/img/further_work/test_roc.png)
 
