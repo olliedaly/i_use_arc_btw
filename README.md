@@ -99,9 +99,11 @@ tested separately.
 
 - **Unsure rule** (Deng et al.). Ruin 9,072 training photos (shrink to 8×8
   pixels, blur heavily or cover half the face) and average their embeddings.
-  That gives the model's "can't tell who this is" direction. A photo pointing
-  along it (cosine above 0.25 for ArcFace, the top 1% of val photos) is marked
-  unsure, and any pair containing it is rejected.
+  That gives the model's "can't tell who this is" direction. Each photo is
+  then checked on its own: if the cosine between its embedding and that
+  direction is above 0.25 (for ArcFace; only 1% of val photos score that high),
+  it is marked unsure. Any pair containing an unsure photo is rejected, however
+  high the cosine between the two photos.
 - **Cohort normalisation** (AS-norm). Compare each photo with 18,144 training
   photos and keep its 300 highest cosines. Their mean and spread show how freely
   the photo matches strangers. A pair's new score is how far its cosine sits
