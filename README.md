@@ -24,9 +24,11 @@ Exploration of how ArcFace is implementated and a comparison of ArcFace classifi
 - **Two heads, trained separately.** A plain softmax classifier, and ArcFace
   (s = 64, m = 0.5). ArcFace scores a photo by its angle to each identity and
   adds 0.5 radians (about 29°) to the angle to its own identity, so the model
-  has to beat every other identity by that margin. Everything else is the same
-  for both: data, data order, seed, optimiser and 10 epochs. After training the
-  head is thrown away and only the embedding is used.
+  has to beat every other identity by that margin (though this can sometimes
+  have unexpected results, see [docs/arcface_trap.md](docs/arcface_trap.md)).
+  Everything else is the same for both: data, data order, seed, optimiser and
+  10 epochs. After training the head is thrown away and only the embedding is
+  used.
 - **Data.** CASIA-WebFace, split by person: 9,072 people for training, 500 for
   validation (val) and 1,000 for test. Val and test people are never seen in
   training.
@@ -55,9 +57,18 @@ Exploration of how ArcFace is implementated and a comparison of ArcFace classifi
 
 ArcFace is ahead by 10.4 points [+9.9, +10.9] at FAR 1e-3 and 12.3 points
 [+11.2, +13.3] at FAR 1e-4. The margin pulls each person's photos closer
-together, so more same-person pairs clear the threshold:
+together, so more same-person pairs clear the threshold. The histograms below
+show this.
 
-![How each model scores pairs](docs/img/test_scores.png)
+![Histograms of pair scores on test](docs/img/test_scores.png)
+
+Each panel is one model on test. It shows the cosine of every same-person pair
+(coloured) and every different-person pair (grey), in bins 0.01 wide. Each set
+is scaled to add up to 1, because there are far more different-person pairs than
+same-person ones. The dashed line is the threshold chosen on val for FAR 1e-3,
+and pairs to its right are accepted. Both trained models put different people
+around 0, but ArcFace's same-person pairs sit further right, so more of them
+clear the line.
 
 The exception is FAR 1e-5, where softmax is ahead by 10.1 points, though not
 clearly: the interval [-4.9, +22.6] crosses 0. Details in
