@@ -265,11 +265,11 @@ def plot_roc(on_ev: dict, split: str, path: Path):
 
 
 def plot_differences(diffs: dict, path: Path):
-    """Two questions, with 95% intervals: does each fix help ArcFace, and with both
-    heads fixed, is ArcFace ahead of softmax? val hollow, evaluation split filled."""
+    """Two questions, with 95% intervals: does each fix help ArcFace, and with the
+    fix, is ArcFace ahead of softmax as is? val hollow, evaluation split filled."""
     groups = {
         "Does the fix help ArcFace?\n(ArcFace with the fix - ArcFace as is)": "help",
-        "Is ArcFace now ahead of softmax?\n(both with the same fix)": "vs softmax",
+        "Is ArcFace with the fix ahead of softmax?\n(ArcFace with the fix - softmax as is)": "vs softmax",
     }
     rows = [f"{fix}\nFAR {f:g}" for fix in FIXES[1:] for f in FARS]
     fig, axes = plt.subplots(1, 2, figsize=(11, 4.6), sharey=True)
@@ -352,10 +352,12 @@ def main():
             r = on[head, fix, split]
             print(f"   {f'{head}, {fix}':32s}" + "".join(f"{r[f'TAR@FAR={f:g}']:11.1%}" for f in FARS))
 
+    # softmax barely changes with either fix (section 3), so ArcFace is compared with
+    # softmax as is: the baseline from step 9.
     comparisons = {}
     for fix in FIXES[1:]:
         comparisons[f"help: {fix}"] = (("ArcFace", fix), ("ArcFace", "as is"))
-        comparisons[f"vs softmax: {fix}"] = (("ArcFace", fix), ("softmax", fix))
+        comparisons[f"vs softmax: {fix}"] = (("ArcFace", fix), ("softmax", "as is"))
     diffs = {s: paired_bootstrap(data, cutoffs, s, comparisons, ds[s].num_classes) for s in splits}
     for s, by_name in diffs.items():
         print(f"\n4. Differences on {s}, with a 95% bootstrap interval ({N_BOOT} resamples of identities)")

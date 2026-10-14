@@ -97,7 +97,9 @@ genuine cosine stand out.
   photos it flags is part of the result.
 - **Cohort:** 18,144 training photos; each photo's 300 highest cosines.
 - **Thresholds:** chosen on val for each FAR and carried over to test.
-- **Both models get both fixes,** so the comparison with softmax stays fair.
+- **Softmax is scored with both fixes too,** to check it doesn't need them
+  (prediction 4). ArcFace with each fix is compared with softmax as is, the
+  baseline from step 9.
 - **Intervals:** a paired bootstrap over people, as in step 9.
 
 <details>
@@ -131,7 +133,7 @@ of unreadable photos. With either fix it stays high, as softmax does.
 
 Each circle is a difference in TAR, in percentage points, and its bar is the
 middle 95% of 1,000 resamples of val's people. Left: ArcFace with the fix minus
-ArcFace as is. Right: ArcFace minus softmax, with both given the same fix. Test
+ArcFace as is. Right: ArcFace with the fix minus softmax as is. Test
 will add filled points beside these.
 
 1. The unsure rule lifts ArcFace's TAR at FAR 1e-5, with an interval that never
@@ -139,13 +141,13 @@ will add filled points beside these.
    or 1e-4 (on val: +0.2 and +2.0).
 2. Cohort normalisation does the same. On val: +29.4 [+10.4, +41.4] at FAR 1e-5,
    and +0.9 and +3.0 at FAR 1e-3 and 1e-4.
-3. With both models given the same fix, ArcFace beats softmax at every FAR,
-   1e-5 included, with intervals that never cross 0. On val, with the unsure
-   rule: +10.3, +12.7 and +12.3 at FAR 1e-3, 1e-4 and 1e-5. With cohort
-   normalisation: +9.0, +11.6 and +12.0.
-4. Neither fix changes softmax's TAR by 3 points or more at any FAR. On val, the
-   unsure rule changes it by -0.3, -0.2 and -0.1, and cohort normalisation by
-   +1.7, +2.0 and +1.9. Softmax's false matches aren't concentrated on a few
+3. With either fix, ArcFace beats softmax as is at every FAR, 1e-5 included,
+   with intervals that never cross 0. On val, with the unsure rule: +10.0, +12.5
+   and +12.2 at FAR 1e-3, 1e-4 and 1e-5. With cohort normalisation: +10.7, +13.6
+   and +13.9.
+4. Softmax doesn't need fixing: neither fix changes its TAR by 3 points or more
+   at any FAR. On val, the unsure rule changes it by -0.3, -0.2 and -0.1, and
+   cohort normalisation by +1.7, +2.0 and +1.9. Softmax's false matches aren't concentrated on a few
    photos (on test, its 1,768 highest-scoring different-person pairs involve
    2,034 photos), so there is little for either fix to remove.
 5. Val's settings carry over. The unsure cutoff flags between 0.5% and 2% of
