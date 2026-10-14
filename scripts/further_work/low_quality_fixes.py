@@ -21,8 +21,8 @@ as in step 9.
 
 Run with:  uv run scripts/further_work/low_quality_fixes.py --eval-split val   (development)
            uv run scripts/further_work/low_quality_fixes.py                    (test, once)
-Writes three figures: to docs/img/further_work/ for test (they illustrate
-docs/further_work/low_quality_fixes.md), to outputs/further_work/ for val.
+Writes three figures per split to docs/img/further_work/, named after the split.
+They illustrate docs/further_work/low_quality_fixes.md.
 """
 
 import argparse
@@ -381,7 +381,7 @@ def main():
           f"({len(rescued):,} such pairs; this one has their median cosine)")
     walk_through(d, int(i[pick]), int(j[pick]), *args5)
 
-    out = Path("docs/img/further_work" if split == "test" else "outputs/further_work")
+    out = Path("docs/img/further_work")
     out.mkdir(parents=True, exist_ok=True)
     plot_centre({h: data[h, split]["near"] for h in HEADS}, ruined_near, cutoffs, split,
                 out / f"{split}_unsure_direction.png")

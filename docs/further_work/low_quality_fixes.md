@@ -39,6 +39,20 @@ becomes a yes or no.
    photo. These pairs still count: a same-person pair answered "different" is a
    miss.
 
+![Where each model puts photos it can't read, on val](../img/further_work/val_unsure_direction.png)
+
+Each panel shows photos by their cosine with that model's "can't tell who this
+is" direction. Purple: the 9,072 ruined training photos. Black outline: val
+photos, up to 20 per val person. The vertical axis is a log scale, so the few
+val photos far to the right still show. The dashed line is the cutoff, and
+photos to its right are unsure.
+
+- **ArcFace (right):** most ruined photos sit above 0.9, and a thin tail of val
+  photos reaches up there with them. Those are its unreadable val photos.
+- **Softmax (left):** its ruined photos spread from about 0 to 0.85 (median
+  0.66), and no val photo gets past about 0.42. Softmax's real photos don't line
+  up with its ruined ones.
+
 On val, ArcFace's highest-scoring pair of different people has a cosine of 0.957,
 well above 0.666, so it is accepted as is. But its two photos' cosines with the
 "can't tell who this is" direction are 0.94 and 0.93, above 0.25, so the rule
@@ -101,6 +115,24 @@ genuine cosine stand out.
 </details>
 
 ## Predictions, written from val before test was used
+
+On val, both fixes lift ArcFace's TAR at FAR 1e-5 from 17% to 44-46%, above
+softmax's 32%.
+
+![ArcFace with each fix, on val](../img/further_work/val_roc.png)
+
+Each line is one model and scoring rule on val. Further right, more pairs of
+different people get through (FAR, log scale), and so do more same-person pairs
+(TAR). The dots are at FAR 1e-5, and the legend gives their TAR. ArcFace as is
+(teal) falls away below FAR 1e-4: there its threshold has to climb over the pairs
+of unreadable photos. With either fix it stays high, as softmax does.
+
+![Differences on val, with intervals](../img/further_work/val_differences.png)
+
+Each circle is a difference in TAR, in percentage points, and its bar is the
+middle 95% of 1,000 resamples of val's people. Left: ArcFace with the fix minus
+ArcFace as is. Right: ArcFace minus softmax, with both given the same fix. Test
+will add filled points beside these.
 
 1. The unsure rule lifts ArcFace's TAR at FAR 1e-5, with an interval that never
    crosses 0. On val: +27.6 points [+9.3, +39.8]. It doesn't hurt at FAR 1e-3
