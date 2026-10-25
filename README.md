@@ -141,3 +141,7 @@ points. Every prediction made on val held on test. Details in
 uv sync
 uv run scripts/check_env.py
 ```
+
+The results were made on an NVIDIA RTX 5060 Ti 16 GB with driver 615.78.08,
+PyTorch 2.14.1 built for CUDA 13.0, and Python 3.13.15 on Linux. Another GPU or
+driver may give slightly different numbers.
