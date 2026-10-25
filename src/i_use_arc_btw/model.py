@@ -9,6 +9,11 @@ import timm
 import torch
 from torch import nn
 
+BACKBONE = "vit_small_patch14_dinov2.lvd142m"
+# timm downloads these weights from Hugging Face. Pinning the commit our results
+# used means a fresh download gets the same file even if the repo is updated.
+BACKBONE_HF = "timm/vit_small_patch14_dinov2.lvd142m@4610ca143709d58a633b6397a74412c2c3842454"
+
 
 class FaceEmbedder(nn.Module):
     def __init__(
@@ -24,8 +29,9 @@ class FaceEmbedder(nn.Module):
         self.pool = pool
 
         self.backbone = timm.create_model(
-            "vit_small_patch14_dinov2.lvd142m",
+            BACKBONE,
             pretrained=pretrained,
+            pretrained_cfg_overlay={"hf_hub_id": BACKBONE_HF},
             img_size=img_size,
         )
         width = self.backbone.embed_dim  # 384 for ViT-S

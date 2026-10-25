@@ -18,6 +18,9 @@ from torchvision.io import ImageReadMode, decode_image, read_file
 # A third-party re-upload of InsightFace's 112x112 CASIA-WebFace, as parquet shards.
 # Non-commercial research use only.
 REPO = "SaffalPoosh/casia_web_face"
+# The repo's commit our results were trained on. Without it a fresh download gets
+# whatever the uploader pushed last.
+REVISION = "08863130fcd1bbdfcbd91442359b80b01d1db741"
 ROOT = Path("data/casia_webface")
 
 # DINOv2 was pretrained on inputs normalised with ImageNet statistics (its timm
@@ -34,6 +37,7 @@ def prepare(root: Path = ROOT) -> None:
         snapshot_download(
             REPO,
             repo_type="dataset",
+            revision=REVISION,
             local_dir=root.with_name(root.name + "_parquet"),
             allow_patterns=["data/*.parquet"],
         )

@@ -6,11 +6,14 @@ Run with:  uv run scripts/inspect_backbone.py
 import timm
 import torch
 
+from i_use_arc_btw.model import BACKBONE, BACKBONE_HF
+
 IMG_SIZE = 112  # standard size for aligned face crops
 
 model = timm.create_model(
-    "vit_small_patch14_dinov2.lvd142m",
+    BACKBONE,
     pretrained=True,
+    pretrained_cfg_overlay={"hf_hub_id": BACKBONE_HF},
     # DINOv2 was pretrained at 518x518. Asking for 112 makes timm resample the
     # learned position embeddings from a 37x37 grid down to an 8x8 grid.
     img_size=IMG_SIZE,
